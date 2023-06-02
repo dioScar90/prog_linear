@@ -1,88 +1,146 @@
 body {
-    background: #0F0C29;
-    background-image: -webkit-linear-gradient(to right, #24243E, #302B63, #0F0C29);
-    background-image: linear-gradient(to right, #24243E, #302B63, #0F0C29);
-}
-
-button {
-    cursor: pointer;
+  background: #0F0C29;
+  background-image: -webkit-linear-gradient(to right, #24243E, #302B63, #0F0C29);
+  background-image: linear-gradient(to right, #24243E, #302B63, #0F0C29);
 }
 
 .container {
-    text-align: center;
-    margin-top: 20%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container > main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.btn-nav {
+  padding: 0;
+  margin-top: 70vh;
+  position: fixed;
+}
+
+.btn-nav li {
+  width: 150px;
+}
+
+button {
+  font-size: 1.7em;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
+  padding: .5em 1.5em;
+  border: 0;
+  border-radius: .1em;
+  background-image: -webkit-radial-gradient(white, #eee);
+  background-image: radial-gradient(white, #eee);
+  cursor: pointer;
+}
+
+button:is(.slide-in, .slide-back-in) {
+  position: absolute;
 }
 
 .slide-in {
-    font-size: 1.7em;
-    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
-    padding: .5em 1.5em;
-    border: 0;
-    border-radius: .1em;
-    background-image: -webkit-radial-gradient(white, #eee);
-    background-image: radial-gradient(white, #eee);
-    animation: slideMeIn .7s ease-in;
+  animation: slideMeIn .7s ease-in forwards;
 }
 
 .slide-out {
-    font-size: 1.7em;
-    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", Arial, sans-serif;
-    padding: .5em 1.5em;
-    border: 0;
-    border-radius: .1em;
-    background-image: -webkit-radial-gradient(white, #eee);
-    background-image: radial-gradient(white, #eee);
-    animation: slideMeOut .7s ease-out;
+  animation: slideMeOut .7s ease-out forwards;
+}
+
+.slide-back-in {
+  animation: slideMeBackIn .7s ease-in forwards;
+}
+
+.slide-back-out {
+  animation: slideMeBackOut .7s ease-out forwards;
 }
 
 @keyframes slideMeIn {
-    0% {
-        transform: skewX(53deg) translateX(-500px);
-        opacity: 0;
-    }
-    60% {
-        transform: translateX(0px);
-    }
-    62% {
-        transform: skewX(0deg) translateX(30px);
-    }
-    70% {
-        transform: skew(-20deg);
-        opacity: 1;
-    }
-    80% {
-        transform: skew(0deg) translate(0);
-    }
-    90% {
-        transform: skew(-5deg);
-    }
-    100% {
-        transform: skew(0deg);
-    }
+  0% {
+    transform: skewX(53deg) translateX(-500px);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(0px);
+  }
+  62% {
+    transform: skewX(0deg) translateX(30px);
+  }
+  70% {
+    transform: skew(-20deg);
+    opacity: 1;
+  }
+  80% {
+    transform: skew(0deg) translate(0);
+  }
+  90% {
+    transform: skew(-5deg);
+  }
+  100% {
+    transform: skew(0deg);
+    visibility: visible;
+  }
 }
 
 @keyframes slideMeOut {
-    0% {
-        transform: skew(0deg);
-    }
-    60% {
-        transform: skew(-5deg);
-    }
-    62% {
-        transform: skew(0deg) translate(0);
-    }
-    70% {
-        transform: skew(-20deg);
-        opacity: 1;
-    }
-    80% {
-        transform: skewX(0deg) translateX(30px);
-    }
-    90% {
-        transform: translateX(0px);
-    }
-    100% {
-        transform: skewX(53deg) translateX(-500px);
-        opacity: 0;
-    }
+  0% {
+    transform: skewX(0deg);
+    opacity: 1;
+  }
+  10% {
+    transform: skew(30deg)translateX(30px);
+  }
+  100% {
+    transform: skewX(30deg) translateX(500px);
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes slideMeBackIn {
+  0% {
+    transform: skewX(53deg) translateX(500px);
+    opacity: 0;
+  }
+  60% {
+    transform: translateX(0px);
+  }
+  62% {
+    transform: skewX(0deg) translateX(30px);
+  }
+  70% {
+    transform: skew(20deg);
+    opacity: 1;
+  }
+  80% {
+    transform: skew(0deg) translate(0);
+  }
+  90% {
+    transform: skew(5deg);
+  }
+  100% {
+    transform: skew(0deg);
+    visibility: visible;
+  }
+}
+
+@keyframes slideMeBackOut {
+  0% {
+    transform: skewX(0deg);
+    opacity: 1;
+  }
+  10% {
+    transform: skew(-30deg)translateX(30px);
+  }
+  100% {
+    transform: skewX(-30deg) translateX(-500px);
+    opacity: 0;
+    visibility: hidden;
+  }
 }

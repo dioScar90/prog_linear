@@ -1,18 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
     <title>Programação Linear</title>
 
     <link rel="stylesheet" href="style.css">
+
+    <script src="https://kit.fontawesome.com/c5b43aab05.js" crossorigin="anonymous" defer></script>
     <script src="script.js" defer></script>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <button data-js="button-slide-in" type="button" class="slide-in">Slide In</button>
+      <main>
+        <button data-js="button-1" type="button" class="slide-in">
+          Button 1
+        </button>
+        <button data-js="button-2" type="button" class="slide-out">
+          Button 2
+        </button>
+
+        <ul data-js="ul-footer" class="btn-nav">
+          <li data-js="btn-left" type="button" class="btn btn-outline-light">
+            <i class="fa-solid fa-backward"></i>
+            Back
+          </li>
+          <li data-js="btn-right" type="button" class="btn btn-outline-light">
+            Foward
+            <i class="fa-solid fa-forward"></i>
+          </li>
+        </ul>
+      </main>
     </div>
-</body>
+  </body>
 </html>
