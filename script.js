@@ -3,14 +3,14 @@ const ulBtnNav = document.querySelector(`[data-js="ul-footer"]`);
 const slide = (toLeft = false) => {
   const back = toLeft === true ? "-back" : '';
 
-  const btnToShow = document.querySelector(`:is(.slide-out, .slide-back-out)`);
-  const btnToHide = document.querySelector(`:is(.slide-in, .slide-back-in)`);
+  const elementToShow = document.querySelector(`:is(.slide-out, .slide-back-out)`);
+  const elementToHide = document.querySelector(`:is(.slide-in, .slide-back-in)`);
 
-  btnToShow.classList.remove("slide-in", "slide-back-in", "slide-out", "slide-back-out");
-  btnToHide.classList.remove("slide-in", "slide-back-in", "slide-out", "slide-back-out");
+  elementToShow.classList.remove("slide-in", "slide-back-in", "slide-out", "slide-back-out");
+  elementToHide.classList.remove("slide-in", "slide-back-in", "slide-out", "slide-back-out");
 
-  btnToHide.classList.add(`slide${back}-out`);
-  btnToShow.classList.add(`slide${back}-in`);
+  elementToHide.classList.add(`slide${back}-out`);
+  elementToShow.classList.add(`slide${back}-in`);
 }
 
 const slideToRight  = () => slide();
@@ -24,7 +24,7 @@ const verifyDataset = dataset => ({
 const startAfterClick = e => {
   const navButton = e.target;
 
-  const funcToCall = verifyDataset(navButton.dataset);
+  const funcToCall = verifyDataset(navButton.dataset.js);
 
   if (!funcToCall)
     return;
@@ -48,5 +48,38 @@ const startAfterKeyup = e => {
   funcToCall();
 }
 
+const init = () => {
+  const obj6 = getObject();
+  const tabela = document.querySelector(`[data-js="tabela-1"]`);
+  const theadTrFragment = document.createDocumentFragment();
+  const tbodyFragment = document.createDocumentFragment();
+
+  Object.keys(obj6.at(0)).forEach(key => {
+    const th = document.createElement("th");
+    th.innerText = key.ucFirst();
+    theadTrFragment.append(th);
+  })
+
+  obj6.forEach(obj => {
+    const tr = document.createElement("tr");
+
+    Object.entries(obj).forEach(([ key, value ], i) => {
+      const elementType = i === 0 ? "th" : "td";
+      const trChild = document.createElement(elementType);
+
+      trChild.innerText = value;
+
+      tr.append(trChild);
+    })
+
+    tbodyFragment.append(tr);
+  })
+
+  tabela.firstElementChild.firstElementChild.append(theadTrFragment);
+  tabela.lastElementChild.append(tbodyFragment);
+}
+
 ulBtnNav.addEventListener("click", startAfterClick);
 document.addEventListener("keyup", startAfterKeyup);
+
+document.addEventListener("DOMContentLoaded", init);
