@@ -41,8 +41,8 @@ button {
   cursor: pointer;
 }
 
-button:is(.slide-in, .slide-back-in) {
-  position: absolute;
+:is(.slide-in, .slide-back-in) {
+  position: inherit;
 }
 
 .slide-in {
