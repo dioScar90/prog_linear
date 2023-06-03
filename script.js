@@ -56,7 +56,7 @@ const init = () => {
 
   Object.keys(obj6.at(0)).forEach(key => {
     const th = document.createElement("th");
-    th.innerText = key.ucFirst();
+    th.innerText = getFormattedKey(key);
     theadTrFragment.append(th);
   })
 
@@ -67,7 +67,8 @@ const init = () => {
       const elementType = i === 0 ? "th" : "td";
       const trChild = document.createElement(elementType);
 
-      trChild.innerText = value;
+      const formattedValue = getFormattedValue(key, value);
+      trChild.innerText = formattedValue;
 
       tr.append(trChild);
     })
