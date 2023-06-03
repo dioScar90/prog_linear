@@ -14,17 +14,20 @@ body {
 
 .container > main {
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   justify-content: center;
   align-items: center;
   height: 100%;
 }
 
-.sua-mae {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+[data-js="slide-1"] {
+  position: relative;
+  width: auto;
+}
+
+[data-js="slide-2"] {
+  position: absolute;
+  width: auto;
 }
 
 .btn-nav {
@@ -46,10 +49,6 @@ button {
   background-image: -webkit-radial-gradient(white, #eee);
   background-image: radial-gradient(white, #eee);
   cursor: pointer;
-}
-
-:is(.slide-in, .slide-back-in) {
-  position: inherit;
 }
 
 .slide-in {

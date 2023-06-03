@@ -36,34 +36,34 @@ const getUnitOfMeasurement = type => ({
   "tempo"   : "min",
 })[type.toLowerCase()] || ''
 
-const toMoney = value => value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-const multiply = (value, factor) => value * factor;
-const getFormattedTime = minutes => Math.floor(minutes / 60) + " h " + (minutes % 60).toString().padStart(2, '0');
+const toMoney = value => value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
+const multiply = (value, factor) => value * factor
+const getFormattedTime = minutes => Math.floor(minutes / 60) + " h " + (minutes % 60).toString().padStart(2, '0')
 
 const getFormattedValue = (key, value) => {
-  const unitOfMeasurement = getUnitOfMeasurement(key);
+  const unitOfMeasurement = getUnitOfMeasurement(key)
 
   if (key === "valor") {
     return toMoney(value)
   }
   
   if (unitOfMeasurement === "m" && value > 0 && value < 1) {
-    return multiply(value, 100) + " cm";
+    return multiply(value, 100) + " cm"
   }
 
   if (unitOfMeasurement === "kg" && value > 0 && value < 1) {
-    return multiply(value, 1000) + " g";
+    return multiply(value, 1000) + " g"
   }
 
   if (unitOfMeasurement === "min" && value > 60) {
-    return getFormattedTime(value);
+    return getFormattedTime(value)
   }
 
   if (value === 0) {
-    return value;
+    return value
   }
 
-  return value.toLocaleString("pt-BR") + ' ' + unitOfMeasurement;
+  return value.toLocaleString("pt-BR") + ' ' + unitOfMeasurement
 }
 
 const getObject = () => ([
@@ -193,4 +193,4 @@ const getObject = () => ([
     tempo   : 480,
     valor   : '*',
   },
-]);
+])
