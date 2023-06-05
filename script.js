@@ -1,4 +1,4 @@
-const ulBtnNav = document.querySelector(`[data-js="ul-footer"]`)
+const ulBtnNav = document.querySelector(getDataId("ul-footer"))
 
 const slide = (toLeft = false) => {
   const back1 = toLeft === true ? '' : "-back"
@@ -80,32 +80,32 @@ const mountTbody = (tbody, items = {}, attr = {}) => {
   })
 }
 
-const mountTableOne = async () => {
-  const obj = getPlaceholderArrayOfObjects()
-
-  const divSlide2 = document.querySelector(`[data-js="slide-2"]`)
+const editTableValuesBeforeAppend = obj => {
   const table = getBaseTable()
   const [ thead, tbody ] = table.children
   
-  await mountThead(thead, obj.at(0), { scope: "col" })
-  
-  await mountTbody(tbody, obj, { scope: "row" }, 0)
-  
-  divSlide2.append(table)
+  mountThead(thead, obj.at(0), { scope: "col" })
+  mountTbody(tbody, obj, { scope: "row" })
+
+  return table
 }
 
-const mountTableTwo = async () => {
-  const obj6 = await getArrayOfObjects()
-
-  const divSlide1 = document.querySelector(`[data-js="slide-1"]`)
-  const table = getBaseTable()
-  const [ thead, tbody ] = table.children
-
-  await mountThead(thead, obj6.at(0))
+const mountTableOne = () => {
+  const obj = getArrayOfObjects()
+  const divSlide1 = document.querySelector(getDataId("slide-1"))
   
-  await mountTbody(tbody, obj6)
+  const table = editTableValuesBeforeAppend(obj);
   
   divSlide1.append(table)
+}
+
+const mountTableTwo = () => {
+  const obj = getPlaceholderArrayOfObjects()
+  const divSlide2 = document.querySelector(getDataId("slide-2"))
+  
+  const table = editTableValuesBeforeAppend(obj);
+  
+  divSlide2.append(table)
 }
 
 const init = () => {
