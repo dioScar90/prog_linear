@@ -100,7 +100,7 @@ button {
     opacity: 1;
   }
   10% {
-    transform: skew(30deg)translateX(30px);
+    transform: skew(30deg) translateX(30px);
   }
   100% {
     transform: skewX(30deg) translateX(500px);
@@ -142,7 +142,7 @@ button {
     opacity: 1;
   }
   10% {
-    transform: skew(-30deg)translateX(30px);
+    transform: skew(-30deg) translateX(30px);
   }
   100% {
     transform: skewX(-30deg) translateX(-500px);

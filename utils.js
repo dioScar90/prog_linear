@@ -36,37 +36,39 @@ const getUnitOfMeasurement = type => ({
   "tempo"   : "min",
 })[type.toLowerCase()] || ''
 
-const toMoney = value => value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
-const multiply = (value, factor) => value * factor
+const getMultiplier = factor => value => value * factor
+const multiplyByHundred = getMultiplier(100)
+const multiplyByThousand = getMultiplier(1000)
+
+const getFormattedMoney = value => value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
 const getFormattedTime = minutes => Math.floor(minutes / 60) + " h " + (minutes % 60).toString().padStart(2, '0')
 
 const getFormattedValue = (key, value) => {
   const unitOfMeasurement = getUnitOfMeasurement(key)
+  const isCentimeter = unitOfMeasurement === "m" && value > 0 && value < 1
+  const isGram = unitOfMeasurement === "kg" && value > 0 && value < 1
+  const isHour = unitOfMeasurement === "min" && value > 60
+  const isZero = value === 0
 
-  if (key === "valor") {
-    return toMoney(value)
-  }
+  if (key === "valor")
+    return getFormattedMoney(value)
   
-  if (unitOfMeasurement === "m" && value > 0 && value < 1) {
-    return multiply(value, 100) + " cm"
-  }
+  if (isCentimeter)
+    return multiplyByHundred(value) + " cm"
 
-  if (unitOfMeasurement === "kg" && value > 0 && value < 1) {
-    return multiply(value, 1000) + " g"
-  }
+  if (isGram)
+    return multiplyByThousand(value) + " g"
 
-  if (unitOfMeasurement === "min" && value > 60) {
+  if (isHour)
     return getFormattedTime(value)
-  }
 
-  if (value === 0) {
+  if (isZero)
     return value
-  }
 
   return value.toLocaleString("pt-BR") + ' ' + unitOfMeasurement
 }
 
-const getObject = () => ([
+const getArrayOfObjects = () => ([
   {
     produtos: 'x1 = Regata',
     linha   : 4,

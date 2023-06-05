@@ -1,7 +1,8 @@
 const ulBtnNav = document.querySelector(`[data-js="ul-footer"]`)
 
 const slide = (toLeft = false) => {
-  const back = toLeft === true ? '' : "-back"
+  const back1 = toLeft === true ? '' : "-back"
+  // const back2 = back1 === '' ? "-back" : ''
 
   const elementToShow = document.querySelector(`:is(.slide-out, .slide-back-out)`)
   const elementToHide = document.querySelector(`:is(.slide-in, .slide-back-in)`)
@@ -9,8 +10,8 @@ const slide = (toLeft = false) => {
   elementToShow.classList.remove("slide-in", "slide-back-in", "slide-out", "slide-back-out")
   elementToHide.classList.remove("slide-in", "slide-back-in", "slide-out", "slide-back-out")
 
-  elementToShow.classList.add(`slide${back}-in`)
-  elementToHide.classList.add(`slide${back}-out`)
+  elementToShow.classList.add(`slide${back1}-in`)
+  elementToHide.classList.add(`slide${back1}-out`)
 }
 
 const slideToRight  = () => slide()
@@ -49,7 +50,7 @@ const startAfterKeyup = e => {
 }
 
 const init = () => {
-  const obj6 = getObject()
+  const obj6 = getArrayOfObjects()
   const tabela = document.querySelector(`[data-js="slide-1"] > table`)
   const theadTrFragment = document.createDocumentFragment()
   const tbodyFragment = document.createDocumentFragment()
