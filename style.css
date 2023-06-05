@@ -67,6 +67,10 @@ button {
   animation: slideMeBackOut .7s ease-out forwards;
 }
 
+.box-shadow {
+  box-shadow: 0px 5px 10px 0px rgba(0, 0, 0, 0.5);
+}
+
 @keyframes slideMeIn {
   0% {
     transform: skewX(53deg) translateX(-500px);
@@ -111,7 +115,7 @@ button {
 
 @keyframes slideMeBackIn {
   0% {
-    transform: skewX(53deg) translateX(500px);
+    transform: skewX(-53deg) translateX(500px);
     opacity: 0;
   }
   60% {

@@ -49,24 +49,26 @@ const startAfterKeyup = e => {
   funcToCall()
 }
 
-const init = () => {
-  const obj6 = getArrayOfObjects()
-  const tabela = document.querySelector(`[data-js="slide-1"] > table`)
-  const theadTrFragment = document.createDocumentFragment()
-  const tbodyFragment = document.createDocumentFragment()
+const mountThead = (thead, items = {}, attr = {}) => {
+  Object.keys(items).forEach((key, i) => {
+    if (i === 0) {
+      const tr = createElement("tr")
+      thead.append(tr)
+    }
 
-  Object.keys(obj6.at(0)).forEach(key => {
-    const th = document.createElement("th")
+    const th = createElement("th", { ...attr })
     th.innerText = getFormattedKey(key)
-    theadTrFragment.append(th)
+    thead.firstElementChild.append(th)
   })
+}
 
-  obj6.forEach(obj => {
-    const tr = document.createElement("tr")
+const mountTbody = (tbody, items = {}, attr = {}) => {
+  items.forEach(item => {
+    const tr = createElement("tr")
 
-    Object.entries(obj).forEach(([ key, value ], i) => {
+    Object.entries(item).forEach(([ key, value ], i) => {
       const elementType = i === 0 ? "th" : "td"
-      const trChild = document.createElement(elementType)
+      const trChild = i === 0 ? createElement(elementType, { ...attr }) : createElement(elementType)
 
       const formattedValue = getFormattedValue(key, value)
       trChild.innerText = formattedValue
@@ -74,11 +76,41 @@ const init = () => {
       tr.append(trChild)
     })
 
-    tbodyFragment.append(tr)
+    tbody.append(tr)
   })
+}
 
-  tabela.firstElementChild.firstElementChild.append(theadTrFragment)
-  tabela.lastElementChild.append(tbodyFragment)
+const mountTableOne = async () => {
+  const obj = getPlaceholderArrayOfObjects()
+
+  const divSlide2 = document.querySelector(`[data-js="slide-2"]`)
+  const table = getBaseTable()
+  const [ thead, tbody ] = table.children
+  
+  await mountThead(thead, obj.at(0), { scope: "col" })
+  
+  await mountTbody(tbody, obj, { scope: "row" }, 0)
+  
+  divSlide2.append(table)
+}
+
+const mountTableTwo = async () => {
+  const obj6 = await getArrayOfObjects()
+
+  const divSlide1 = document.querySelector(`[data-js="slide-1"]`)
+  const table = getBaseTable()
+  const [ thead, tbody ] = table.children
+
+  await mountThead(thead, obj6.at(0))
+  
+  await mountTbody(tbody, obj6)
+  
+  divSlide1.append(table)
+}
+
+const init = () => {
+  mountTableOne()
+  mountTableTwo()
 }
 
 ulBtnNav.addEventListener("click", startAfterClick)

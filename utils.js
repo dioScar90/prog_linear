@@ -15,6 +15,29 @@ String.prototype.ucFirst = function() {
     ).join(' ')
 }
 
+const createElement = (type, object = {}) => {
+  const newElement = document.createElement(type)
+
+  for (const key in object) {
+    newElement.setAttribute(key, object[key])
+  }
+
+  return newElement
+}
+
+const getBaseTable = (attr = {}) => {
+  // const fragment = document.createDocumentFragment();
+  const table = createElement("table", { ...attr, class: "table mb-0 table-bordered table-striped table-dark overflow-hidden" })
+  const thead = createElement("thead", { class: "bg-primary bg-gradient" })
+  const tbody = createElement("tbody")
+  
+  table.append(thead)
+  table.append(tbody)
+  // fragment.append(table)
+
+  return table
+}
+
 const checkIfWordThatMustBeChanged = word => ({
   "elastico": "elástico",
   "botoes"  : "botões",
@@ -67,6 +90,27 @@ const getFormattedValue = (key, value) => {
 
   return value.toLocaleString("pt-BR") + ' ' + unitOfMeasurement
 }
+
+const getPlaceholderArrayOfObjects = () => ([
+  {
+    hash: 1,
+    first: "Mark",
+    last: "Otto",
+    handle: "@mdo"
+  },
+  {
+    hash: 2,
+    first: "Jacob",
+    last: "Thornton",
+    handle: "@fat"
+  },
+  {
+    hash: 3,
+    first: "Larry",
+    last: "the Bird",
+    handle: "@twitter"
+  }
+])
 
 const getArrayOfObjects = () => ([
   {
