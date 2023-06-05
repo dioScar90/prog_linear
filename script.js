@@ -56,7 +56,7 @@ const mountThead = (thead, items = {}, attr = {}) => {
       thead.append(tr)
     }
 
-    const th = createElement("th", { ...attr })
+    const th = createElement("th", { ...attr, class: "text-center" })
     th.innerText = getFormattedKey(key)
     thead.firstElementChild.append(th)
   })
@@ -68,7 +68,9 @@ const mountTbody = (tbody, items = {}, attr = {}) => {
 
     Object.entries(item).forEach(([ key, value ], i) => {
       const elementType = i === 0 ? "th" : "td"
-      const trChild = i === 0 ? createElement(elementType, { ...attr }) : createElement(elementType)
+      const trChild = i === 0
+      ? createElement(elementType, { ...attr, class: "text-center" })
+      : createElement(elementType, { class: "text-center" })
 
       const formattedValue = getFormattedValue(key, value)
       trChild.innerText = formattedValue

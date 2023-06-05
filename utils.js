@@ -290,6 +290,6 @@ const getArrayOfObjects = () => ([
     algodao : 50,
     seda    : 50,
     tempo   : 480,
-    valor   : '*',
+    valor   : 330,
   },
 ])
