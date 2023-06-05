@@ -15,6 +15,59 @@ String.prototype.ucFirst = function() {
     ).join(' ')
 }
 
+class Utils {
+  static #getTextToCompare = (row, qs) => row.querySelector(qs).innerText.trim().toLowerCase()
+
+  static #sortTableByColumnDiferente = (colNum, asc = true, tabelaHead) => {
+    const tbody = tabelaHead.nextElementSibling
+    const fragmentToBeReplacedWith = document.createDocumentFragment()
+    const thClickedColumn = tabelaHead.querySelector(`tr > th:nth-child(${colNum})`)
+    
+    const rowsToBeSorted = [...tbody.children].map(row => row.cloneNode(true))
+    
+    const selectorToSearch = `td:nth-child(${colNum})`
+    rowsToBeSorted.sort((row1, row2) => {
+      const text1 = this.#getTextToCompare(row1, selectorToSearch)
+      const text2 = this.#getTextToCompare(row2, selectorToSearch)
+      
+      const options = [ undefined, { numeric: true } ]
+      
+      return asc === true ? text1.localeCompare(text2, ...options) : text2.localeCompare(text1, ...options)
+    })
+    
+    rowsToBeSorted.forEach(row => fragmentToBeReplacedWith.append(row))
+    tbody.replaceChildren(fragmentToBeReplacedWith)
+    
+    const iconType = asc === true ? "up" : "down"
+    const newThContent = `<i class="fas fa-sort-amount-${iconType}-alt"></i><span>&nbsp;&nbsp;</span>${thClickedColumn.innerHTML}`
+
+    thClickedColumn.innerHTML = newThContent
+    thClickedColumn.classList.add("bg-primary")
+  }
+
+  static sortTableByColumn = tableHeader => {
+    const index = tableHeader.cellIndex
+    const tabelaHead = tableHeader.closest("thead")
+    const allTh = tabelaHead.querySelectorAll("tr > th")
+    const asc = allTh[index].toggleAttribute("data-order-by")
+
+    allTh.forEach((th, i) => {
+      const iFontAwesome = th.querySelector('i')
+      th.classList.remove("bg-primary")
+
+      if (iFontAwesome !== null) {
+        iFontAwesome.nextElementSibling.remove()
+        iFontAwesome.remove()
+      }
+
+      if (i !== index && th.dataset.orderBy)
+        delete th.dataset.orderBy
+    })
+    
+    this.#sortTableByColumnDiferente(index + 1, asc, tabelaHead)
+  }
+}
+
 const createElement = (type, object = {}) => {
   const newElement = document.createElement(type)
 
