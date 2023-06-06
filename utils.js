@@ -1,89 +1,88 @@
 String.prototype.ucFirst = function() {
-  const notThis = [
-    "di", "da", "das", "do", "dos", "de", "e", "von", "van",
-    "le", "la", "du", "des", "del", "della", "der", "al"
-  ]
-  
-  return this.toLowerCase()
-    .replace(/\s+/g, ' ')
-    .trim()
-    .split(' ')
-    .map(word =>
-      notThis.includes(word)
-      ? word
-      : word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ')
+  const notThis = ["di","da","das","do","dos","de","e","von","van","le","la","du","des","del","della","der","al"]
+  const allWords = this.toLowerCase().replace(/\s+/g, ' ').trim().split(' ')
+  return allWords.map(word => notThis.includes(word) ? word : word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
 }
+
+const is = value => Object.prototype.toString.call(value);
+const isArray = value => is(value) === "[object Array]";
+const isFunction = value => is(value) === "[object Function]";
+const isObject = value => is(value) === "[object Object]";
+const isNull = value => is(value) === "[object Null]";
 
 class Utils {
   static #getTextToCompare = (row, qs) => row.querySelector(qs).innerText.trim().toLowerCase()
 
-  static #sortTableByColumnDiferente = (colNum, asc = true, tabelaHead) => {
-    const tbody = tabelaHead.nextElementSibling
-    const fragmentToBeReplacedWith = document.createDocumentFragment()
-    const thClickedColumn = tabelaHead.querySelector(`tr > th:nth-child(${colNum})`)
+  static #sortTableByColumnDiferente = (colNum, desc = false, thead) => {
+    const fragmentToBeReplacedWith = document.createDocumentFragment();
+    const tbody = thead.nextElementSibling;
+
+    const nthChild = `:is(td, th):nth-child(${colNum})`;
+    const thClickedColumn = thead.querySelector(`tr > ${nthChild}`);
     
-    const rowsToBeSorted = [...tbody.children].map(row => row.cloneNode(true))
+    const rowsToBeSorted = [...tbody.children].map(row => row.cloneNode(true));
     
-    const selectorToSearch = `td:nth-child(${colNum})`
     rowsToBeSorted.sort((row1, row2) => {
-      const text1 = this.#getTextToCompare(row1, selectorToSearch)
-      const text2 = this.#getTextToCompare(row2, selectorToSearch)
+      const text1 = this.#getTextToCompare(row1, nthChild);
+      const text2 = this.#getTextToCompare(row2, nthChild);
       
       const options = [ undefined, { numeric: true } ]
       
-      return asc === true ? text1.localeCompare(text2, ...options) : text2.localeCompare(text1, ...options)
-    })
+      return desc === true ? text2.localeCompare(text1, ...options) : text1.localeCompare(text2, ...options);
+    });
     
     rowsToBeSorted.forEach(row => fragmentToBeReplacedWith.append(row))
     tbody.replaceChildren(fragmentToBeReplacedWith)
     
-    const iconType = asc === true ? "up" : "down"
-    const newThContent = `<i class="fas fa-sort-amount-${iconType}-alt"></i><span>&nbsp;&nbsp;</span>${thClickedColumn.innerHTML}`
+    const iconType = desc === true ? "down" : "up";
+    const newThContent =
+      `<i class="fas fa-sort-amount-${iconType}-alt"></i><span>&nbsp;&nbsp;</span>${thClickedColumn.innerHTML}`;
 
-    thClickedColumn.innerHTML = newThContent
-    thClickedColumn.classList.add("bg-primary")
+    thClickedColumn.innerHTML = newThContent;
+    thClickedColumn.classList.add("bg-primary");
   }
 
-  static sortTableByColumn = tableHeader => {
-    const index = tableHeader.cellIndex
-    const tabelaHead = tableHeader.closest("thead")
-    const allTh = tabelaHead.querySelectorAll("tr > th")
-    const asc = allTh[index].toggleAttribute("data-order-by")
+  static sortTableByColumn = thisTh => {
+    const index = thisTh.cellIndex;
+    const thead = thisTh.closest("thead");
+    const allTh = thead.querySelectorAll("tr > th");
+    const asc = allTh[index].toggleAttribute("data-order-by");
 
     allTh.forEach((th, i) => {
-      const iFontAwesome = th.querySelector('i')
-      th.classList.remove("bg-primary")
+      const iFontAwesome = th.querySelector('i');
+      th.classList.remove("bg-primary");
 
       if (iFontAwesome !== null) {
-        iFontAwesome.nextElementSibling.remove()
-        iFontAwesome.remove()
+        iFontAwesome.nextElementSibling.remove();
+        iFontAwesome.remove();
       }
 
       if (i !== index && th.dataset.orderBy)
-        delete th.dataset.orderBy
+        delete th.dataset.orderBy;
     })
     
-    this.#sortTableByColumnDiferente(index + 1, asc, tabelaHead)
+    this.#sortTableByColumnDiferente((index + 1), !asc, thead);
   }
 }
 
-const createElement = (type, object = {}) => {
+const getNewElement = (type, object = {}) => {
   const newElement = document.createElement(type)
 
-  for (const key in object) {
+  for (const key in object)
     newElement.setAttribute(key, object[key])
-  }
-
+  
   return newElement
 }
+
+const getFragment = () => document.createDocumentFragment()
+const getTemplate = () => getNewElement("template")
 
 const getDataId = dataId => `[data-js="${dataId}"]`
 
 const getBaseTable = (attr = {}) => {
-  const table = createElement("table", { ...attr, class: "table mb-0 table-bordered table-striped table-dark overflow-hidden" })
-  const thead = createElement("thead", { class: "bg-primary bg-gradient" })
-  const tbody = createElement("tbody")
+  const table = getNewElement("table", { ...attr, class: "table mb-0 table-bordered table-striped table-dark overflow-hidden" })
+  const thead = getNewElement("thead", { class: "bg-primary bg-gradient" })
+  const tbody = getNewElement("tbody")
   
   table.append(thead)
   table.append(tbody)

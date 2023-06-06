@@ -52,11 +52,11 @@ const startAfterKeyup = e => {
 const mountThead = (thead, items = {}, attr = {}) => {
   Object.keys(items).forEach((key, i) => {
     if (i === 0) {
-      const tr = createElement("tr")
+      const tr = getNewElement("tr")
       thead.append(tr)
     }
 
-    const th = createElement("th", { ...attr, class: "text-center" })
+    const th = getNewElement("th", { ...attr, class: "text-center" })
     th.innerText = getFormattedKey(key)
     thead.firstElementChild.append(th)
   })
@@ -64,13 +64,13 @@ const mountThead = (thead, items = {}, attr = {}) => {
 
 const mountTbody = (tbody, items = {}, attr = {}) => {
   items.forEach(item => {
-    const tr = createElement("tr")
+    const tr = getNewElement("tr")
 
     Object.entries(item).forEach(([ key, value ], i) => {
       const elementType = i === 0 ? "th" : "td"
       const trChild = i === 0
-      ? createElement(elementType, { ...attr, class: "text-center" })
-      : createElement(elementType, { class: "text-center" })
+      ? getNewElement(elementType, { ...attr, class: "text-center" })
+      : getNewElement(elementType, { class: "text-center" })
 
       const formattedValue = getFormattedValue(key, value)
       trChild.innerText = formattedValue
