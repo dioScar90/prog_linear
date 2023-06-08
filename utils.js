@@ -321,7 +321,7 @@ const getInfos = () => ([
     "capacitor pth poliester 1uf 63v 5%": 2,
     "tempo": 4,
     "valor custo": 80.19,
-    "valor de venda": 144.342,
+    "valor de venda": 144.34,
     "capacitor pth eletrolitico radial 470uf 50v 85g +/- 20% 10x20mm (p.5,0mm) fitado": 6,
   },
   {
@@ -336,7 +336,7 @@ const getInfos = () => ([
     "capacitor pth poliester 1uf 63v 5%": 6,
     "tempo": 6,
     "valor custo": 95.02,
-    "valor de venda": 171.036,
+    "valor de venda": 171.03,
     "capacitor pth eletrolitico radial 470uf 50v 85g +/- 20% 10x20mm (p.5,0mm) fitado": 2,
   },
   {
@@ -351,7 +351,7 @@ const getInfos = () => ([
     "capacitor pth poliester 1uf 63v 5%": 8,
     "tempo": 4,
     "valor custo": 72.68,
-    "valor de venda": 130.824,
+    "valor de venda": 130.82,
     "capacitor pth eletrolitico radial 470uf 50v 85g +/- 20% 10x20mm (p.5,0mm) fitado": 10,
   },
   {
@@ -366,7 +366,7 @@ const getInfos = () => ([
     "capacitor pth poliester 1uf 63v 5%": 0,
     "tempo": 5,
     "valor custo": 120.89,
-    "valor de venda": 217.602,
+    "valor de venda": 217.60,
     "capacitor pth eletrolitico radial 470uf 50v 85g +/- 20% 10x20mm (p.5,0mm) fitado": 5,
   },
   {
@@ -381,7 +381,7 @@ const getInfos = () => ([
     "capacitor pth poliester 1uf 63v 5%": 0,
     "tempo": 3,
     "valor custo": 135.46,
-    "valor de venda": 243.828,
+    "valor de venda": 243.82,
     "capacitor pth eletrolitico radial 470uf 50v 85g +/- 20% 10x20mm (p.5,0mm) fitado": 0,
   },
   {
@@ -396,7 +396,7 @@ const getInfos = () => ([
     "capacitor pth poliester 1uf 63v 5%": 0,
     "tempo": 3,
     "valor custo": 125.54,
-    "valor de venda": 225.972,
+    "valor de venda": 225.97,
     "capacitor pth eletrolitico radial 470uf 50v 85g +/- 20% 10x20mm (p.5,0mm) fitado": 0,
   },
   {
@@ -411,7 +411,7 @@ const getInfos = () => ([
     "capacitor pth poliester 1uf 63v 5%": 0,
     "tempo": 4,
     "valor custo": 250.69,
-    "valor de venda": 451.242,
+    "valor de venda": 451.24,
     "capacitor pth eletrolitico radial 470uf 50v 85g +/- 20% 10x20mm (p.5,0mm) fitado": 0,
   }
 ])
