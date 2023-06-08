@@ -113,6 +113,8 @@ const mountTableTwo = () => {
 const init = () => {
   mountTableOne()
   mountTableTwo()
+  const arr = getInfos()
+  console.log(arr)
 }
 
 ulBtnNav.addEventListener("click", startAfterClick)
