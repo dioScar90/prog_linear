@@ -122,6 +122,9 @@ const init = () => {
   mountTableTwo()
   const arr = getInfos()
   console.log(arr)
+  
+  const text = getTextToChatGpt()
+  console.log(text)
 }
 
 ulBtnNav.addEventListener("click", startAfterClick)
