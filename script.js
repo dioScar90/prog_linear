@@ -51,12 +51,15 @@ const startAfterKeyup = e => {
 
 const mountThead = (thead, items = {}, attr = {}) => {
   Object.keys(items).forEach((key, i) => {
+    if (key === "preco_venda")
+      return
+    
     if (i === 0) {
       const tr = getNewElement("tr")
       thead.append(tr)
     }
 
-    const th = getNewElement("th", { ...attr, class: "text-center" })
+    const th = getNewElement("th", { ...attr, class: "text-center align-middle" })
     th.innerText = getFormattedKey(key)
     thead.firstElementChild.append(th)
   })
@@ -67,10 +70,13 @@ const mountTbody = (tbody, items = {}, attr = {}) => {
     const tr = getNewElement("tr")
 
     Object.entries(item).forEach(([ key, value ], i) => {
+      if (key === "preco_venda")
+        return
+
       const elementType = i === 0 ? "th" : "td"
       const trChild = i === 0
-      ? getNewElement(elementType, { ...attr, class: "text-center" })
-      : getNewElement(elementType, { class: "text-center" })
+      ? getNewElement(elementType, { ...attr, class: "text-center align-middle" })
+      : getNewElement(elementType, { class: "text-center align-middle" })
 
       const formattedValue = getFormattedValue(key, value)
       trChild.innerText = formattedValue
@@ -93,7 +99,8 @@ const editTableValuesBeforeAppend = obj => {
 }
 
 const mountTableOne = () => {
-  const obj = getArrayOfObjects()
+  // const obj = getArrayOfObjects()
+  const obj = getInfos()
   const divSlide1 = document.querySelector(getDataId("slide-1"))
   
   const table = editTableValuesBeforeAppend(obj);
