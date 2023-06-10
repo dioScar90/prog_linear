@@ -4,65 +4,67 @@ String.prototype.ucFirst = function() {
   return allWords.map(word => notThis.includes(word) ? word : word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
 }
 
-const is = value => Object.prototype.toString.call(value);
-const isArray = value => is(value) === '[object Array]';
-const isFunction = value => is(value) === '[object Function]';
-const isObject = value => is(value) === '[object Object]';
-const isNull = value => is(value) === '[object Null]';
+const is = value => Object.prototype.toString.call(value)
+const isArray = value => is(value) === '[object Array]'
+const isFunction = value => is(value) === '[object Function]'
+const isObject = value => is(value) === '[object Object]'
+const isNull = value => is(value) === '[object Null]'
 
 class Utils {
   static #getTextToCompare = (row, qs) => row.querySelector(qs).innerText.trim().toLowerCase()
 
   static #sortTableByColumnDiferente = (colNum, desc = false, thead) => {
-    const fragmentToBeReplacedWith = document.createDocumentFragment();
-    const tbody = thead.nextElementSibling;
+    const fragmentToBeReplacedWith = document.createDocumentFragment()
+    const tbody = thead.nextElementSibling
 
-    const nthChild = `:is(td, th):nth-child(${colNum})`;
-    const thClickedColumn = thead.querySelector(`tr > ${nthChild}`);
+    const nthChild = `:is(td, th):nth-child(${colNum})`
+    const thClickedColumn = thead.querySelector(`tr > ${nthChild}`)
     
-    const rowsToBeSorted = [...tbody.children].map(row => row.cloneNode(true));
+    const rowsToBeSorted = [...tbody.children].map(row => row.cloneNode(true))
     
     rowsToBeSorted.sort((row1, row2) => {
-      const text1 = this.#getTextToCompare(row1, nthChild);
-      const text2 = this.#getTextToCompare(row2, nthChild);
-      
+      const text1 = this.#getTextToCompare(row1, nthChild)
+      const text2 = this.#getTextToCompare(row2, nthChild)
+
       const options = [ undefined, { numeric: true } ]
       
-      return desc === true ? text2.localeCompare(text1, ...options) : text1.localeCompare(text2, ...options);
-    });
+      return desc === true ? text2.localeCompare(text1, ...options) : text1.localeCompare(text2, ...options)
+    })
     
     rowsToBeSorted.forEach(row => fragmentToBeReplacedWith.append(row))
     tbody.replaceChildren(fragmentToBeReplacedWith)
     
-    const iconType = desc === true ? 'down' : 'up';
+    const iconType = desc === true ? 'down' : 'up'
     const newThContent =
-      `<i class="fas fa-sort-amount-${iconType}-alt"></i><span>&nbsp;&nbsp;</span>${thClickedColumn.innerHTML}`;
+      `<i class="fas fa-sort-amount-${iconType}-alt"></i><span>&nbsp;&nbsp;</span>${thClickedColumn.innerHTML}`
 
-    thClickedColumn.innerHTML = newThContent;
-    thClickedColumn.classList.add('bg-primary');
+    thClickedColumn.innerHTML = newThContent
+    thClickedColumn.classList.add('bg-primary')
   }
 
   static sortTableByColumn = thisTh => {
-    const index = thisTh.cellIndex;
-    const thead = thisTh.closest('thead');
-    const allTh = thead.querySelectorAll('tr > th');
-    const asc = allTh[index].toggleAttribute('data-order-by');
+    const index = thisTh.cellIndex
+    const thead = thisTh.closest('thead')
+    const allTh = thead.querySelectorAll('tr > th')
+    const asc = allTh[index].toggleAttribute('data-order-by')
 
     allTh.forEach((th, i) => {
-      const iFontAwesome = th.querySelector('i');
-      th.classList.remove('bg-primary');
+      const iFontAwesome = th.querySelector('i')
+      th.classList.remove('bg-primary')
 
       if (iFontAwesome !== null) {
-        iFontAwesome.nextElementSibling.remove();
-        iFontAwesome.remove();
+        iFontAwesome.nextElementSibling.remove()
+        iFontAwesome.remove()
       }
 
       if (i !== index && th.dataset.orderBy)
-        delete th.dataset.orderBy;
+        delete th.dataset.orderBy
     })
     
-    this.#sortTableByColumnDiferente((index + 1), !asc, thead);
+    this.#sortTableByColumnDiferente((index + 1), !asc, thead)
   }
+
+  static getUrlId = id => new URL(location).searchParams.get(id)
 }
 
 const getNewElement = (type, object = {}) => {
@@ -77,7 +79,7 @@ const getNewElement = (type, object = {}) => {
 const getFragment = () => document.createDocumentFragment()
 const getTemplate = () => getNewElement('template')
 
-const getDataId = dataId => `[data-js="${dataId}"]`
+const getDataId = dataId => `[data-id="${dataId}"]`
 
 const getBaseTable = (attr = {}) => {
   const table = getNewElement('table', { ...attr, class: 'table mb-0 table-bordered table-striped table-dark overflow-hidden' })
@@ -129,7 +131,7 @@ const getUnitOfMeasurement = type => ({
   carcaca: 'kit',
   kit_reparo: 'kit',
   conjunto_magnetico: 'kit',
-})[type.toLowerCase()] || 'un'
+})[type.toLowerCase()] || ''
 
 const getMultiplier = factor => value => value * factor
 const multiplyByHundred = getMultiplier(100)
@@ -181,135 +183,6 @@ const getPlaceholderArrayOfObjects = () => ([
     first: 'Larry',
     last: 'the Bird',
     handle: '@twitter'
-  },
-])
-
-const getArrayOfObjects = () => ([
-  {
-    produtos: 'x1 = Regata',
-    linha   : 4,
-    tecido  : 2.5,
-    elastico: 1,
-    botoes  : 0,
-    estampa : 0,
-    corante : 0,
-    bolso   : 0,
-    algodao : 0,
-    seda    : 0,
-    tempo   : 2,
-    valor   : 25,
-  },
-  {
-    produtos: 'x2 = Lisa',
-    linha   : 7,
-    tecido  : 3,
-    elastico: 1.2,
-    botoes  : 0,
-    estampa : 0,
-    corante : 0,
-    bolso   : 0,
-    algodao : 0,
-    seda    : 0,
-    tempo   : 3,
-    valor   : 30,
-  },
-  {
-    produtos: 'x3 = Manga Longa',
-    linha   : 8,
-    tecido  : 3.5,
-    elastico: 1.4,
-    botoes  : 0,
-    estampa : 0,
-    corante : 0,
-    bolso   : 0,
-    algodao : 0,
-    seda    : 0,
-    tempo   : 4,
-    valor   : 40,
-  },
-  {
-    produtos: 'x4 = Polo',
-    linha   : 8,
-    tecido  : 3.3,
-    elastico: 0,
-    botoes  : 3,
-    estampa : 0,
-    corante : 0,
-    bolso   : 0,
-    algodao : 0,
-    seda    : 0,
-    tempo   : 4,
-    valor   : 45,
-  },
-  {
-    produtos: 'x5 = Social',
-    linha   : 10,
-    tecido  : 0,
-    elastico: 0,
-    botoes  : 7,
-    estampa : 0,
-    corante : 0,
-    bolso   : 0.1,
-    algodao : 4,
-    seda    : 0,
-    tempo   : 6,
-    valor   : 55,
-  },
-  {
-    produtos: 'x6 = Gola V',
-    linha   : 6,
-    tecido  : 2.8,
-    elastico: 1,
-    botoes  : 0,
-    estampa : 0,
-    corante : 0,
-    bolso   : 0,
-    algodao : 0,
-    seda    : 0,
-    tempo   : 3,
-    valor   : 30,
-  },
-  {
-    produtos: 'x7 = Portuguesa',
-    linha   : 6,
-    tecido  : 0,
-    elastico: 1.8,
-    botoes  : 3,
-    estampa : 0,
-    corante : 0,
-    bolso   : 0,
-    algodao : 0,
-    seda    : 3,
-    tempo   : 5,
-    valor   : 55,
-  },
-  {
-    produtos: 'x8 = Estampa',
-    linha   : 7,
-    tecido  : 3,
-    elastico: 1.2,
-    botoes  : 0,
-    estampa : 0.25,
-    corante : 0.2,
-    bolso   : 0,
-    algodao : 0,
-    seda    : 0,
-    tempo   : 7,
-    valor   : 50,
-  },
-  {
-    produtos: 'Total',
-    linha   : 600,
-    tecido  : 200,
-    elastico: 50,
-    botoes  : 200,
-    estampa : 200,
-    corante : 6,
-    bolso   : 50,
-    algodao : 50,
-    seda    : 50,
-    tempo   : 480,
-    valor   : 330,
   },
 ])
 
@@ -452,19 +325,54 @@ const getInfos = () => ([
     tempo: 4,
     custo: 2506.9,
     preco_venda: 4512.4,
-  }
+  },
+  {
+    produto: 'TOTAIS',
+    carcaca: 5000,
+    kit_reparo: 5000,
+    conjunto_magnetico: 5000,
+    nucleo_toroidal: 2000,
+    indutor: 2000,
+    nucleo_carretel: 2000,
+    placa: 2000,
+    capacitor_poliester: 5000,
+    capacitor_eletrolitico: 10000,
+    tempo: 10000000,
+    custo: 9480000.0,
+    preco_venda: null,
+  },
 ])
 
-/*
-  Eu tenho alguns produtos que possuem itens necessários para sua produção. Vou listar abaixo tanto os produtos quanto os itens necessários para sua produção
-  e gostaria que me sugerisse quanto devo ter disponível (em estoque, orçamento etc.) de cada item para poder aplicar um método Solver no Excel. Segue a lista:
-*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const getTextToChatGpt = () => {
   const products = getInfos()
   const initial =
-    'Eu tenho alguns produtos que possuem itens necessários para sua produção. Vou listar abaixo tanto os produtos quanto os itens necessários para sua produção' +
-    'e gostaria que me sugerisse quanto devo ter disponível (em estoque, orçamento etc.) de cada item para poder aplicar um método Solver no Excel. Segue a lista:'
+    'Eu tenho alguns produtos que possuem itens necessários para sua produção. ' +
+    'Vou listar abaixo tanto os produtos quanto os itens necessários para sua produção' +
+    'e gostaria que me sugerisse quanto devo ter disponível (em estoque, orçamento etc.) ' +
+    'de cada item para poder aplicar um método Solver no Excel. Segue a lista:'
 
   const finalStr = products.reduce((acc, curr) => {
     const strToConcat = Object.entries(curr).reduce((acc2, [ key, value ], i) => {

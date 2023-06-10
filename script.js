@@ -1,3 +1,4 @@
+const main = document.querySelector(getDataId('main'))
 const ulBtnNav = document.querySelector(getDataId('ul-footer'))
 
 const slide = (toLeft = false) => {
@@ -17,20 +18,29 @@ const slide = (toLeft = false) => {
 const slideToRight  = () => slide()
 const slideToLeft   = () => slide(true)
 
-const verifyDataset = dataset => ({
-  'btn-left'    : slideToLeft,
-  'btn-right'   : slideToRight,
-})[dataset] || false
+const getObjToCallByEvent = (funcToCall, argument = null) => ({ funcToCall, argument });
+
+const verifyDatasetToGetArgument = (element, dataId) => ({
+  'table-restricoes'  : element.closest('th')
+})[dataId] || null
+
+const verifyDatasetToGetFunction = dataId => ({
+  'btn-left'          : slideToLeft,
+  'btn-right'         : slideToRight,
+  'table-restricoes'  : Utils.sortTableByColumn,
+})[dataId] || false
 
 const startAfterClick = e => {
-  const navButton = e.target
+  const element = e.target
+  const dataId = element.closest('table').dataset.id ?? element.dataset.id
 
-  const funcToCall = verifyDataset(navButton.dataset.js)
+  const funcToCall = verifyDatasetToGetFunction(dataId)
+  const argToSet = verifyDatasetToGetArgument(element, dataId)
 
   if (!funcToCall)
     return
   
-  funcToCall()
+  funcToCall(argToSet)
 }
 
 const verifyKey = key => ({
@@ -89,7 +99,7 @@ const mountTbody = (tbody, items = {}, attr = {}) => {
 }
 
 const editTableValuesBeforeAppend = obj => {
-  const table = getBaseTable()
+  const table = getBaseTable({ 'data-id': 'table-restricoes' })
   const [ thead, tbody ] = table.children
   
   mountThead(thead, obj.at(0), { scope: 'col' })
@@ -121,13 +131,13 @@ const init = () => {
   mountTableOne()
   mountTableTwo()
   const arr = getInfos()
-  console.log(arr)
+  // console.log(arr)
   
   const text = getTextToChatGpt()
-  console.log(text)
+  // console.log(text)
 }
 
-ulBtnNav.addEventListener('click', startAfterClick)
+main.addEventListener('click', startAfterClick)
 document.addEventListener('keyup', startAfterKeyup)
 
 document.addEventListener('DOMContentLoaded', init)

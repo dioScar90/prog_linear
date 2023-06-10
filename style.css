@@ -22,14 +22,18 @@ body {
   height: 100%;
 }
 
-[data-js="slide-1"] {
+[data-id="slide-1"] {
   position: relative;
   width: auto;
 }
 
-[data-js="slide-2"] {
+[data-id="slide-2"] {
   position: absolute;
   width: auto;
+}
+
+[data-id="table-restricoes"] > thead > tr th {
+  cursor: pointer;
 }
 
 .btn-nav {
