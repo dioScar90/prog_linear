@@ -26,7 +26,7 @@ const verifyDatasetToGetArgument = (element, dataId) => ({
 
 const verifyDatasetToGetFunction = dataId => ({
   'btn-left'          : slideToLeft,
-  'btn-right'         : slideToRight,
+  'btn-right'         : slideToRight, 
   'table-restricoes'  : Utils.sortTableByColumn,
 })[dataId] || false
 

@@ -92,6 +92,15 @@ const getBaseTable = (attr = {}) => {
   return table
 }
 
+const imgUrls = imgName => ({
+  custo_minimo    : `images/custo_minimo.png`,
+  canto_noroeste  : `images/canto_noroeste.png`,
+  vogel           : `images/vogel.png`,
+  hyundai_hr      : `images/hyundai_hr.png`,
+})[imgName] || ''
+
+const getImgUrl = imgName => imgUrls(imgName)
+
 const checkIfWordMustBeChanged = word => ({
   elastico: 'elástico',
   botoes  : 'botões',
