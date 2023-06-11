@@ -10,10 +10,10 @@ const isFunction = value => is(value) === '[object Function]'
 const isObject = value => is(value) === '[object Object]'
 const isNull = value => is(value) === '[object Null]'
 
-class Utils {
-  static #getTextToCompare = (row, qs) => row.querySelector(qs).innerText.trim().toLowerCase()
+const Utils = (() => {
+  getTextToCompare = (row, qs) => row.querySelector(qs).innerText.trim().toLowerCase()
 
-  static #sortTableByColumnDiferente = (colNum, desc = false, thead) => {
+  sortTableByDiferentColumn = (colNum, desc = false, thead) => {
     const fragmentToBeReplacedWith = document.createDocumentFragment()
     const tbody = thead.nextElementSibling
 
@@ -23,8 +23,8 @@ class Utils {
     const rowsToBeSorted = [...tbody.children].map(row => row.cloneNode(true))
     
     rowsToBeSorted.sort((row1, row2) => {
-      const text1 = this.#getTextToCompare(row1, nthChild)
-      const text2 = this.#getTextToCompare(row2, nthChild)
+      const text1 = getTextToCompare(row1, nthChild)
+      const text2 = getTextToCompare(row2, nthChild)
 
       const options = [ undefined, { numeric: true } ]
       
@@ -42,7 +42,7 @@ class Utils {
     thClickedColumn.classList.add('bg-primary')
   }
 
-  static sortTableByColumn = thisTh => {
+  sortTableByColumn = thisTh => {
     const index = thisTh.cellIndex
     const thead = thisTh.closest('thead')
     const allTh = thead.querySelectorAll('tr > th')
@@ -61,11 +61,13 @@ class Utils {
         delete th.dataset.orderBy
     })
     
-    this.#sortTableByColumnDiferente((index + 1), !asc, thead)
+    sortTableByDiferentColumn((index + 1), !asc, thead)
   }
 
-  static getUrlId = id => new URL(location).searchParams.get(id)
-}
+  getUrlId = id => new URL(location).searchParams.get(id)
+
+  return { sortTableByColumn, getUrlId }
+})()
 
 const getNewElement = (type, object = {}) => {
   const newElement = document.createElement(type)
@@ -136,11 +138,11 @@ const getUnitOfMeasurement = type => ({
   algodao : 'm',
   seda    : 'm',
   // tempo   : 'min',
-  tempo   : 'dias',
+  tempo   : 'dia',
   carcaca: 'kit',
   kit_reparo: 'kit',
   conjunto_magnetico: 'kit',
-})[type.toLowerCase()] || ''
+})[type.toLowerCase()] || 'un'
 
 const getMultiplier = factor => value => value * factor
 const multiplyByHundred = getMultiplier(100)
@@ -154,7 +156,8 @@ const getFormattedValue = (key, value) => {
   const isCentimeter = unitOfMeasurement === 'm' && value > 0 && value < 1
   const isGram = unitOfMeasurement === 'kg' && value > 0 && value < 1
   const isHour = unitOfMeasurement === 'min' && value > 60
-  const isZero = value === 0
+  const isZeroOrProdutoKey = value === 0 || key === 'produto'
+  const isKitOrDia = ['kit', 'dia'].includes(unitOfMeasurement)
 
   if (['valor', 'custo', 'preco_venda'].includes(key))
     return getFormattedMoney(value)
@@ -168,237 +171,11 @@ const getFormattedValue = (key, value) => {
   if (isHour)
     return getFormattedHourByMinutes(value)
 
-  if (isZero)
+  if (isZeroOrProdutoKey)
     return value
+  
+  if (isKitOrDia)
+    return value.toLocaleString('pt-BR') + ' ' + unitOfMeasurement + (value > 1 ? 's' : '')
 
   return value.toLocaleString('pt-BR') + ' ' + unitOfMeasurement
-}
-
-const getPlaceholderArrayOfObjects = () => ([
-  {
-    '#': 1,
-    first: 'Mark',
-    last: 'Otto',
-    handle: '@mdo'
-  },
-  {
-    '#': 2,
-    first: 'Jacob',
-    last: 'Thornton',
-    handle: '@fat'
-  },
-  {
-    '#': 3,
-    first: 'Larry',
-    last: 'the Bird',
-    handle: '@twitter'
-  },
-])
-
-const getProperties = () => ({
-  produto: 'produto',
-  carcaca: 'subconjunto carcaca preta',
-  kit_reparo: 'subconjunto kit reparo',
-  conjunto_magnetico: 'subconjunto conjunto magnético',
-  // nucleo_toroidal: 'núcleo de ferrite toroidal 25,3x14,8x20,0mm coated',
-  nucleo_toroidal: 'núcleo de ferrite toroidal',
-  indutor: 'indutor',
-  // nucleo_carretel: 'núcleo ferrite carretel dr2w10x12 d30 10,0x12,0x5,5mm without coat',
-  nucleo_carretel: 'núcleo ferrite carretel',
-  placa: 'placa',
-  capacitor_poliester: 'capacitor pth poliéster 1uf 63v 5%',
-  // capacitor_eletrolitico: 'capacitor pth eletrolítico radial 470uf 50v 85g +/- 20% 10x20mm (p.5,0mm) fitado',
-  capacitor_eletrolitico: 'capacitor pth eletrolítico radial',
-  tempo: 'tempo',
-  custo: 'custo',
-  preco_venda: 'preço de venda',
-})
-
-const getInfos = () => ([
-  {
-    produto: 'AMPLIF. CLASS D TS 400X4 WATTS',
-    carcaca: 0,
-    kit_reparo: 0,
-    conjunto_magnetico: 0,
-    nucleo_toroidal: 1,
-    indutor: 1,
-    nucleo_carretel: 0,
-    placa: 1,
-    capacitor_poliester: 4,
-    capacitor_eletrolitico: 5,
-    tempo: 3,
-    custo: 653.5,
-    preco_venda: 1176.3,
-  },
-  {
-    produto: 'AMPLIF. CLASS D DS 440X4',
-    carcaca: 0,
-    kit_reparo: 0,
-    conjunto_magnetico: 0,
-    nucleo_toroidal: 1,
-    indutor: 0,
-    nucleo_carretel: 1,
-    placa: 1,
-    capacitor_poliester: 2,
-    capacitor_eletrolitico: 6,
-    tempo: 4,
-    custo: 801.9,
-    preco_venda: 1443.4,
-  },
-  {
-    produto: 'AMPLIF. CLASS D MD 1200.1 4 OHMS',
-    carcaca: 0,
-    kit_reparo: 0,
-    conjunto_magnetico: 0,
-    nucleo_toroidal: 2,
-    indutor: 2,
-    nucleo_carretel: 0,
-    placa: 1,
-    capacitor_poliester: 6,
-    capacitor_eletrolitico: 2,
-    tempo: 6,
-    custo: 950.2,
-    preco_venda: 1710.3,
-  },
-  {
-    produto: 'AMPLIF. CLASS D BASS 800 1 OHM',
-    carcaca: 0,
-    kit_reparo: 0,
-    conjunto_magnetico: 0,
-    nucleo_toroidal: 2,
-    indutor: 2,
-    nucleo_carretel: 0,
-    placa: 1,
-    capacitor_poliester: 8,
-    capacitor_eletrolitico: 10,
-    tempo: 4,
-    custo: 726.8,
-    preco_venda: 1308.2,
-  },
-  {
-    produto: 'AMPLAYER 400',
-    carcaca: 0,
-    kit_reparo: 0,
-    conjunto_magnetico: 0,
-    nucleo_toroidal: 8,
-    indutor: 0,
-    nucleo_carretel: 5,
-    placa: 2,
-    capacitor_poliester: 0,
-    capacitor_eletrolitico: 5,
-    tempo: 5,
-    custo: 1208.9,
-    preco_venda: 2176.0,
-  },
-  {
-    produto: 'ALTO FALANTE 12 BASS 1K6 2+2 OHMS',
-    carcaca: 1,
-    kit_reparo: 1,
-    conjunto_magnetico: 1,
-    nucleo_toroidal: 0,
-    indutor: 0,
-    nucleo_carretel: 0,
-    placa: 0,
-    capacitor_poliester: 0,
-    capacitor_eletrolitico: 0,
-    tempo: 3,
-    custo: 1354.6,
-    preco_venda: 2438.2,
-  },
-  {
-    produto: 'ALTO FALANTE 5 HD 250S 4 OHMS',
-    carcaca: 1,
-    kit_reparo: 1,
-    conjunto_magnetico: 1,
-    nucleo_toroidal: 0,
-    indutor: 0,
-    nucleo_carretel: 0,
-    placa: 0,
-    capacitor_poliester: 0,
-    capacitor_eletrolitico: 0,
-    tempo: 3,
-    custo: 1255.4,
-    preco_venda: 2259.7,
-  },
-  {
-    produto: 'ALTO FALANTE 12 ML 570S 4 OHMS',
-    carcaca: 1,
-    kit_reparo: 1,
-    conjunto_magnetico: 1,
-    nucleo_toroidal: 0,
-    indutor: 0,
-    nucleo_carretel: 0,
-    placa: 0,
-    capacitor_poliester: 0,
-    capacitor_eletrolitico: 0,
-    tempo: 4,
-    custo: 2506.9,
-    preco_venda: 4512.4,
-  },
-  {
-    produto: 'TOTAIS',
-    carcaca: 5000,
-    kit_reparo: 5000,
-    conjunto_magnetico: 5000,
-    nucleo_toroidal: 2000,
-    indutor: 2000,
-    nucleo_carretel: 2000,
-    placa: 2000,
-    capacitor_poliester: 5000,
-    capacitor_eletrolitico: 10000,
-    tempo: 10000000,
-    custo: 9480000.0,
-    preco_venda: null,
-  },
-])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const getTextToChatGpt = () => {
-  const products = getInfos()
-  const initial =
-    'Eu tenho alguns produtos que possuem itens necessários para sua produção. ' +
-    'Vou listar abaixo tanto os produtos quanto os itens necessários para sua produção' +
-    'e gostaria que me sugerisse quanto devo ter disponível (em estoque, orçamento etc.) ' +
-    'de cada item para poder aplicar um método Solver no Excel. Segue a lista:'
-
-  const finalStr = products.reduce((acc, curr) => {
-    const strToConcat = Object.entries(curr).reduce((acc2, [ key, value ], i) => {
-      if (key === 'produto')
-        return acc2 + `\n\nProduto: ${value}.\nItens:`
-
-      if (value === 0)
-        return acc2
-      
-      const formattedKey = getFormattedKey(key)
-      const formattedValue = getFormattedValue(key, value)
-      const itemStr = `\n- ${formattedKey} => ${formattedValue}`
-      return acc2 + itemStr
-    }, '')
-
-    return acc + strToConcat
-  }, initial)
-
-  return finalStr
 }

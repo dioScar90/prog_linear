@@ -1,18 +1,40 @@
 const main = document.querySelector(getDataId('main'))
 const ulBtnNav = document.querySelector(getDataId('ul-footer'))
 
-const slide = (toLeft = false) => {
+const slideNow = (elementToShow, elementToHide, toLeft) => {
   const back1 = toLeft === true ? '' : '-back'
-  // const back2 = back1 === '' ? '-back' : ''
+  
+  // const elementToShow = document.querySelector(`:is(.slide-out, .slide-back-out)`)
+  // const elementToHide = document.querySelector(`:is(.slide-in, .slide-back-in)`)
 
-  const elementToShow = document.querySelector(`:is(.slide-out, .slide-back-out)`)
-  const elementToHide = document.querySelector(`:is(.slide-in, .slide-back-in)`)
-
-  elementToShow.classList.remove('slide-in', 'slide-back-in', 'slide-out', 'slide-back-out')
+  // elementToShow.classList.remove('slide-in', 'slide-back-in', 'slide-out', 'slide-back-out')
   elementToHide.classList.remove('slide-in', 'slide-back-in', 'slide-out', 'slide-back-out')
 
+  elementToShow.append(toLeft === true
+    ? editTableValuesBeforeAppend(getInfos())
+    : editTableValuesBeforeAppend(getPlaceholderArrayOfObjects())
+  )
+
+  elementToShow.hidden = false
   elementToShow.classList.add(`slide${back1}-in`)
   elementToHide.classList.add(`slide${back1}-out`)
+
+  // setTimeout(() =>
+    elementToHide.remove()
+  // , 1000)
+}
+
+const slide = (toLeft = false) => {
+  const elementAtScreen = document.querySelector(`.container > main > :nth-child(2)`)
+  const placeholderDiv = toLeft === true ? elementAtScreen.previousElementSibling : elementAtScreen.nextElementSibling
+  const clonePlaceholderDiv = placeholderDiv.cloneNode(true)
+
+  if (toLeft === true)
+    placeholderDiv.after(clonePlaceholderDiv)
+  else
+    placeholderDiv.before(clonePlaceholderDiv)
+
+  slideNow(clonePlaceholderDiv, elementAtScreen, toLeft)
 }
 
 const slideToRight  = () => slide()
@@ -32,7 +54,7 @@ const verifyDatasetToGetFunction = dataId => ({
 
 const startAfterClick = e => {
   const element = e.target
-  const dataId = element.closest('table').dataset.id ?? element.dataset.id
+  const { dataset: { id: dataId } } = element.closest('table:has(> thead :scope)') ?? element
 
   const funcToCall = verifyDatasetToGetFunction(dataId)
   const argToSet = verifyDatasetToGetArgument(element, dataId)
@@ -118,23 +140,19 @@ const mountTableOne = () => {
   divSlide1.append(table)
 }
 
-const mountTableTwo = () => {
-  const obj = getPlaceholderArrayOfObjects()
-  const divSlide2 = document.querySelector(getDataId('slide-2'))
+// const mountTableTwo = () => {
+//   const obj = getPlaceholderArrayOfObjects()
+//   const divSlide2 = document.querySelector(getDataId('slide-2'))
   
-  const table = editTableValuesBeforeAppend(obj);
+//   const table = editTableValuesBeforeAppend(obj);
   
-  divSlide2.append(table)
-}
+//   divSlide2.append(table)
+// }
 
 const init = () => {
   mountTableOne()
-  mountTableTwo()
+  // mountTableTwo()
   const arr = getInfos()
-  // console.log(arr)
-  
-  const text = getTextToChatGpt()
-  // console.log(text)
 }
 
 main.addEventListener('click', startAfterClick)
